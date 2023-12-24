@@ -35,8 +35,8 @@ class PaymentAPI(APIView):
             }
             
             payment_intent = stripe.PaymentIntent.create(
-                amount=10000,
-                currency='inr',
+                amount=data_dict['amount'],
+                currency=data_dict['currency'],
             )
             payment_intent_modified = stripe.PaymentIntent.modify(
                 payment_intent['id'],

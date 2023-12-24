@@ -7,6 +7,8 @@
     "expiry_month": "08",
     "expiry_year": "2030",
     "cvc": "123",
-    "email": "test@gmail.com"
+    "email": "test@gmail.com",
+    "amount": 1000,
+    "currency": "inr"
 }
 ```
