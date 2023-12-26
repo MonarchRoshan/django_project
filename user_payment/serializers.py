@@ -36,5 +36,5 @@ class CardInformationSerializer(serializers.Serializer):
         required=True,
         validators=[check_cvc],
     )
-    amount = serializers.DecimalField(max_digits=10, decimal_places=5, required=True)
+    amount = serializers.IntegerField(required=True)
     currency = serializers.CharField(max_length=150, required=True)
