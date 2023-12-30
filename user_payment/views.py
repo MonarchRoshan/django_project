@@ -38,17 +38,20 @@ class PaymentAPI(APIView):
                 amount=int(data_dict['amount']),
                 currency=data_dict['currency'],
             )
+         
             payment_intent_modified = stripe.PaymentIntent.modify(
                 payment_intent['id'],
-                payment_method=card_details['id'],
+                payment_method="pm_card_visa"   
             )
-            
             try:
                 payment_confirm = stripe.PaymentIntent.confirm(
-                    payment_intent['id']
-                )
+                    payment_intent["id"],
+                    payment_method="pm_card_visa",
+                    return_url="https://www.example.com",
+                    )
                 payment_intent_modified = stripe.PaymentIntent.retrieve(payment_intent['id'])
-            except:
+            except Exception as e:
+                print("Error", e)
                 payment_intent_modified = stripe.PaymentIntent.retrieve(payment_intent['id'])
                 payment_confirm = {
                     "stripe_payment_error": "Failed",
@@ -56,7 +59,8 @@ class PaymentAPI(APIView):
                     "message": payment_intent_modified['last_payment_error']['message'],
                     'status': "Failed"
                 }
-                
+            
+            
             if payment_intent_modified and payment_intent_modified['status'] == 'succeeded':
                 response = {
                     'message': "Card Payment Success",
@@ -73,7 +77,8 @@ class PaymentAPI(APIView):
                     "payment_intent": payment_intent_modified,
                     "payment_confirm": payment_confirm
                 }
-        except:
+        except Exception as inst:
+            print("error", inst)
             response = {
                 'error': "Your card number is incorrect",
                 'status': status.HTTP_400_BAD_REQUEST,
